@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Large-scale pretrained text-conditioned diffusion models enable the zero-shot learning of text-conditioned policies.">
+  <meta name="keywords" content="TADPoLe, Diffusion, Policies">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adapt2Act</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- Favicon edited from Yu luck (https://thenounproject.com/yuluck/)-->
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <script src="./static/js/index.js"></script>
+  <!-- <script>
+    $(function() {
+        $('#includedContent').load('goal_carousel.html');
+    });
+  </script> -->
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Solving New Tasks by Adapting Internet Video Knowledge</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://calvinyluo.com">Calvin Luo</a>*,</span>
+            <span class="author-block">
+              <a href="https://zilaiz.github.io">Zilai Zeng</a>*,</span>
+            <span class="author-block">
+              <a href="https://yilundu.github.io">Yilun Du</a>,</span>
+            <span class="author-block">
+              <a href="https://chensun.me">Chen Sun</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Brown University<br>ICLR 2025</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section abstract">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Video generative models demonstrate great promise in unlocking robotic behavior, both when utilized as visual planners or as policy supervisors.  When pretrained on internet-scale data, such video models intimately understand alignment with natural language, and can thus facilitate generalization to novel downstream behavior through text-conditioning.  However, they may not be sensitive to the specificities of the particular environment the agent inhabits.  On the other hand, training video models on in-domain examples of robotic behavior naturally encodes environment-specific intricacies, but the scale of available demonstrations may not be sufficient to support generalization to unseen tasks via natural language specification.  In this work, we investigate different adaptation techniques that integrate in-domain information with large-scale pretrained video models, and explore the extent to which they enable novel text-conditioned generalization for robotic tasks, while also considering their independent data and resource considerations.  We successfully demonstrate across robotic environments that adapting powerful video models with small scales of example data can successfully facilitate generalization to novel behaviors. In particular, we present a novel adaptation strategy, termed Inverse Probabilistic Adaptation, that not only consistently achieves strong generalization performance across robotic tasks and settings, but also exhibits robustness to the quality of adaptation data, successfully solving novel tasks even when only suboptimal in-domain demonstrations are available.
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!--/ Pipeline Image. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="pipeline column is-four-fifths">
+        <h2 class="title is-3">Adaptation Techniques</h2>
+        <div class="pipeline-img">
+          <img src="static/images/adaptation_techniques_medium.png" alt="Adaptation Techniques">
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            We explore three different adaptation techniques: Subject Customization, Probabilistic Adaptation, and Direct Finetuning.  Subject Customization only modifies the image and text encoder, rather than the motion module, and is lightweight in terms of data requirements: it only utilizes pairs of static images and text annotated with a special identifier.  Probabilistic Adaptation learns a small in-domain model from paired video data, which is then used through score composition with a large-scale video model that is kept frozen.  The small in-domain model can be flexibly parameterized to consider available training resources. Direct Finetuning seeks to update the motion module of the large-scale video model with in-domain paired video data.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="is-centered has-text-centered">
+      <h2 class="title is-3">Experiments</h2>
+      <div class="pipeline-img">
+        <img src="static/images/applying_adaptation_new.png" alt="Roles of Video Models">
+      </div>
+      <div class="content has-text-justified">
+        <p>
+          We evaluate how adapted video models can enable text-conditioned generalization via two approaches: visual planning and policy supervision.  For visual planning, the adapted video model synthesizes a text-conditioned video plan into the future, which is then converted into actions to follow.  In policy supervision, the adapted video model is used in a discriminative manner to evaluate frames achieved by the policy; these are converted into text-conditioned rewards, which the policy is optimized to maximize. Below we visualize the actual rollouts during environment interaction.
+        </p>
+      </div>
+    </div>
+
+    <section class="hero is-light is-small">
+      <div class="hero-body">
+        <div class="container">
+          <!-- <div class="is-centered has-text-centered">
+          </div> -->
+          <h2 class="subtitle-4by4 title is-size-5">Policy Supervision</h2>
+          <!-- <div class="content has-text-justified">
+            <p>
+              ##
+            </p>
+          </div> -->
+          <div id="results-carousel" class="carousel results-carousel">
+            
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_animatediffonly" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/animatediff_only_door.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm opening a door"</h3>
+                <h3 class="subtitle type">AnimateDiff (Vanilla)</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_dreambooth" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/dreambooth_door.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a [D] robot arm opening a door"</h3>
+                <h3 class="subtitle type">Subject Customization</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_directfinetuning" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/finetuned_door.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm opening a door"</h3>
+                <h3 class="subtitle type">Direct Finetuning</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_probadap" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/probadap_door.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm opening a door" | "door open"
+                </h3>
+                <h3 class="subtitle type">Probabilistic Adaptation</h3>
+              </div>
+            </div>
+
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_invprobadap" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/inv_probadap_door.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm opening a door" | "door open"</h3>
+                <h3 class="subtitle type">Inverse Probablistic Adaptation</h3>
+              </div>
+            </div>
+
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_animatediffonly_humanoid" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/animatediff_only_humanoid.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"an action figure walking"</h3>
+                <h3 class="subtitle type">AnimateDiff (Vanilla)</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_dreambooth_humanoid" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/dreambooth_humanoid.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a [D] action figure walking"</h3>
+                <h3 class="subtitle type">Subject Customization</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_directfinetuning_humanoid" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/finetuned_humanoid.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"an action figure walking"</h3>
+                <h3 class="subtitle type">Direct Finetuning</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_probadap_humanoid" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/probadap_humanoid.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"an action figure walking"
+                </h3>
+                <h3 class="subtitle type">Probabilistic Adaptation</h3>
+              </div>
+            </div>
+            
+
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_animatediffonly_dog" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/animatediff_only_dog.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a dog walking"</h3>
+                <h3 class="subtitle type">AnimateDiff (Vanilla)</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_dreambooth_dog" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/dreambooth_dog.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a [D] dog walking"</h3>
+                <h3 class="subtitle type">Subject Customization</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_directfinetuning_dog" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/finetuned_dog.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a dog walking"</h3>
+                <h3 class="subtitle type">Direct Finetuning</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="ps_probadap_dog" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/policy_supervision/probadap_dog.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a dog walking"
+                </h3>
+                <h3 class="subtitle type">Probabilistic Adaptation</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-light is-small">
+      <div class="hero-body">
+          <div class="container">
+            <h2 class="subtitle-4by4 title is-size-5">Visual Planning</h2>
+            <!-- <div class="content has-text-justified">
+              <p>
+                ##
+              </p>
+            </div> -->
+
+            <!-- VIDEO ----VIDEO --VIDEO ----VIDEO --VIDEO ----VIDEO --VIDEO ----VIDEO --VIDEO ----VIDEO --VIDEO ----VIDEO --VIDEO ----VIDEO -->
+            <div id="visual-planning-carousel" class="carousel results-carousel">
+              
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_animatediffonly" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/close_loop_animatediffonly_button_press_policy_rollout.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a robot arm pushing a button"</h3>
+                  <h3 class="subtitle type">AnimateDiff (Vanilla)</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_indomainonly" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/avdc_only_eval_video_1.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"button press"</h3>
+                  <h3 class="subtitle type">In-Domain Only</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_dreambooth" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/dreambooth_eval_video_1.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a [D] robot arm pushing a button"</h3>
+                  <h3 class="subtitle type">Subject Customization</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_probadap" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/probadap_eval_video_1.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a robot arm pushing a button" | "button press"</h3>
+                  <h3 class="subtitle type">Probabilistic Adaptation</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_probadap" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/inv_probadap_eval_video_1.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a robot arm pushing a button" | "button press"</h3>
+                  <h3 class="subtitle type">Inverse Probabilistic Adaptation</h3>
+                </div>
+              </div>
+
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_animatediffonly_drawer" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/animatediff_only_eval_video_1_drawer.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a robot arm closing a drawer"</h3>
+                  <h3 class="subtitle type">AnimateDiff (Vanilla)</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_indomainonly_drawer" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/avdc_only_eval_video_1_drawer.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"drawer close"</h3>
+                  <h3 class="subtitle type">In-Domain Only</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_dreambooth_drawer" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/dreambooth_eval_video_1_drawer.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a [D] robot arm closing a drawer"</h3>
+                  <h3 class="subtitle type">Subject Customization</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_probadap_drawer" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/probadap_eval_video_1_drawer.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a robot arm closing a drawer" | "drawer close"</h3>
+                  <h3 class="subtitle type">Probabilistic Adaptation</h3>
+                </div>
+              </div>
+              <div class="item item-steve has-background">
+                <video poster="" id="vp_probadap_drawer" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/visual_planning/inv_probadap_eval_video_1_drawer.mp4"
+                          type="video/mp4">
+                </video>
+                <div class="has-text-centered">
+                  <h3 class="subtitle prompt">"a robot arm closing a drawer" | "drawer close"</h3>
+                  <h3 class="subtitle type">Inverse Probabilistic Adaptation</h3>
+                </div>
+              </div>
+          </div>
+      </div>
+    </section>
+
+    <section class="hero is-light is-small">
+      <div class="hero-body">
+        <div class="container">
+          <!-- <div class="is-centered has-text-centered">
+          </div> -->
+          <h2 class="subtitle-4by4 title is-size-5">Visual Planning with Suboptimal Data</h2>
+          <!-- <div class="content has-text-justified">
+            <p>
+             ##
+            </p>
+          </div> -->
+          <div id="results-carousel" class="carousel results-carousel">
+            
+            <!-- drawer_open_close ---------- drawer_open_close -------  drawer_open_close  ---------- drawer_open_close -------  drawer_open_close -->
+            <div class="item item-steve has-background">
+              <video poster="" id="vps_indomainonly_drawer" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/visual_planning_suboptimal/avdc_only_eval_video_subopt_door.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"drawer close"</h3>
+                <h3 class="subtitle type">In-Domain Only</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="vps_probadap_drawer" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/visual_planning_suboptimal/probadap_eval_video_subopt_drawer.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm closing a drawer" | "drawer close"</h3>
+                <h3 class="subtitle type">Probabilistic Adaptation</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="vps_invprobadap_drawer" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/visual_planning_suboptimal/inv_probadap_eval_video_subopt_drawer.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm closing a drawer" | "drawer close"</h3>
+                <h3 class="subtitle type">Inverse Probabilistic Adaptation</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="vps_indomainonly_window" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/visual_planning_suboptimal/avdc_only_eval_video_subopt_window.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"window close"</h3>
+                <h3 class="subtitle type">In-Domain Only</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="vps_probadap_window" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/visual_planning_suboptimal/probadap_eval_video_subopt_window.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm closing a window" | "window close"</h3>
+                <h3 class="subtitle type">Probabilistic Adaptation</h3>
+              </div>
+            </div>
+            <div class="item item-steve has-background">
+              <video poster="" id="vps_invprobadap_window" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/visual_planning_suboptimal/inv_probadap_eval_video_subopt_window.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle prompt">"a robot arm closing a window" | "window close"</h3>
+                <h3 class="subtitle type">Inverse Probabilistic Adaptation</h3>
+              </div>
+            </div>
+      
+          
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--/ Metaworld Carousel. -->
+
+    <section class="hero is-light is-small">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="subtitle-4by4 title is-size-5">Quantitative Results on MetaWorld</h2>
+          <div class="content has-text-justified">
+            <p>
+             We discover that our proposed Inverse Probabilistic Adaptation can serve as a strong adaptation technique across different task and evaluation settings, which remains robust when only suboptimal demonstrations are available.
+            </p>
+          </div>
+    <div class="figure-container">
+      <figure class="figure">
+          <img src="./static/images/policy_supervision.png" alt="policy_supervision">
+          <figcaption>Policy Supervision</figcaption>
+      </figure>
+      <figure class="figure">
+          <img src="./static/images/visual_planning.png" alt="visual_planning">
+          <figcaption>Visual Planning</figcaption>
+      </figure>
+      <figure class="figure">
+          <img src="./static/images/suboptimal_visual_planning.png" alt="visual_planning_with_suboptimal">
+          <figcaption>Visual Planning with Suboptimal Data</figcaption>
+      </figure>
+    </div>
+    </div>
+    </div>
+    </section>
+  
+
+    <!--/ Pipeline Image. -->
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="is-centered has-text-centered">
+          <h2 class="title is-3">Novel Text-Conditioned Generalization</h2>
+          <div id="novel-prompt-text" class="content has-text-justified">
+            <p>
+              We visualize the free-form video generated by adapted video models, conditioned on a novel text-prompt ("a dog jumping") that was unseen during adaptation. When using the adapted video model for policy supervision (simply as a critic that provides text-conditioned rewards), we showcase that it can successfully supervise a downstream Dog agent to behave according to this novel text specification in a zero-shot manner.
+            </p>
+          </div>
+            <div class="video-container">
+              <div >
+              <video poster="" class="nove_text_freeform" autoplay controls muted loop playsinline style="width: 100%; height: 400px; object-fit: cover;">
+                <source src="./static/videos/text_conditioned_generalization/a_dog_jumping_finetuned_freeform.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle type small">"a dog jumping"</h3>
+                <h3 class="subtitle type">Free-form Generation (Direct Finetuning)</h3>
+              </div>
+            </div>
+            <div >
+              <video poster="" class="nove_text_rollout" autoplay controls muted loop playsinline style="width: 100%; height: 400px; object-fit: cover;">
+                <source src="./static/videos/text_conditioned_generalization/a_dog_jumping_policy.mp4"
+                        type="video/mp4">
+              </video>
+              <div class="has-text-centered">
+                <h3 class="subtitle type small">"a dog jumping"</h3>
+                <h3 class="subtitle type">Policy Rollout (Direct Finetuning)</h3>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--/ Pipeline Image. -->
+
+    
+  </div>
+</div>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{
+      luo2025solving,
+      title={Solving New Tasks by Adapting Internet Video Knowledge},
+      author={Calvin Luo and Zilai Zeng and Yilun Du and Chen Sun},
+      booktitle={The Thirteenth International Conference on Learning Representations},
+      year={2025}
+    }</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <!-- <div class="column is-8"> -->
+        <div class="content">
+          <!-- <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p> -->
+          <!-- <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p> -->
+          <p>
+            This website licensed under a <a rel="license"
+            href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a> and is based on this  <a
+            href="https://github.com/nerfies/nerfies.github.io">source code</a>.
+          </p>
+        </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
